@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeVR", "HomeVR.csproj", "{D57DD873-B585-45B5-B789-2A9CC0487E87}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "AWS", "..\AWS\AWS.shproj", "{6CFB6E24-2D71-466E-A322-3D93883B5026}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\AWS\AWS.projitems*{6cfb6e24-2d71-466e-a322-3d93883b5026}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM = Debug|ARM
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|ARM = Release|ARM
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D57DD873-B585-45B5-B789-2A9CC0487E87}.Debug|ARM.ActiveCfg = Debug|ARM
+		{D57DD873-B585-45B5-B789-2A9CC0487E87}.Debug|ARM.Build.0 = Debug|ARM
+		{D57DD873-B585-45B5-B789-2A9CC0487E87}.Debug|ARM.Deploy.0 = Debug|ARM
+		{D57DD873-B585-45B5-B789-2A9CC0487E87}.Debug|x64.ActiveCfg = Debug|x64
+		{D57DD873-B585-45B5-B789-2A9CC0487E87}.Debug|x64.Build.0 = Debug|x64
+		{D57DD873-B585-45B5-B789-2A9CC0487E87}.Debug|x64.Deploy.0 = Debug|x64
+		{D57DD873-B585-45B5-B789-2A9CC0487E87}.Debug|x86.ActiveCfg = Debug|x86
+		{D57DD873-B585-45B5-B789-2A9CC0487E87}.Debug|x86.Build.0 = Debug|x86
+		{D57DD873-B585-45B5-B789-2A9CC0487E87}.Debug|x86.Deploy.0 = Debug|x86
+		{D57DD873-B585-45B5-B789-2A9CC0487E87}.Release|ARM.ActiveCfg = Release|ARM
+		{D57DD873-B585-45B5-B789-2A9CC0487E87}.Release|ARM.Build.0 = Release|ARM
+		{D57DD873-B585-45B5-B789-2A9CC0487E87}.Release|ARM.Deploy.0 = Release|ARM
+		{D57DD873-B585-45B5-B789-2A9CC0487E87}.Release|x64.ActiveCfg = Release|x64
+		{D57DD873-B585-45B5-B789-2A9CC0487E87}.Release|x64.Build.0 = Release|x64
+		{D57DD873-B585-45B5-B789-2A9CC0487E87}.Release|x64.Deploy.0 = Release|x64
+		{D57DD873-B585-45B5-B789-2A9CC0487E87}.Release|x86.ActiveCfg = Release|x86
+		{D57DD873-B585-45B5-B789-2A9CC0487E87}.Release|x86.Build.0 = Release|x86
+		{D57DD873-B585-45B5-B789-2A9CC0487E87}.Release|x86.Deploy.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F3CDB10E-16C0-490A-B2B9-458761C923F6}
+	EndGlobalSection
+EndGlobal
