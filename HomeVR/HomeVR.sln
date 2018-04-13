@@ -10,6 +10,7 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\AWS\AWS.projitems*{6cfb6e24-2d71-466e-a322-3d93883b5026}*SharedItemsImports = 13
+		..\AWS\AWS.projitems*{d57dd873-b585-45b5-b789-2a9cc0487e87}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
