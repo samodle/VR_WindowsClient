@@ -3,17 +3,35 @@ using System.Collections.Generic;
 using System.Text;
 using Amazon.DynamoDBv2;
  using Amazon.DynamoDBv2.Model;
+using Amazon.Runtime;
+
 namespace AWS
 {
-    public class DynamoDB
+    public static class DynamoDB
     {
-        private AmazonDynamoDBClient client = new AmazonDynamoDBClient();
-   
-        private void MakeTable()
+        #region Variables/Properties
+
+        public static AmazonDynamoDBClient client;
+
+
+        #endregion
+        static DynamoDB()
+        {
+            var resources = new Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView(); ;
+           // var token = resources.GetString("secret");
+            
+            client = new AmazonDynamoDBClient(resources.GetString("AWSKeyID"),resources.GetString("AWSKeySecret"));
+        }
+
+  
+        public async static void MakeTable()
         {
 
             Console.WriteLine("Getting list of tables");
-            List<string> currentTables = client.ListTables().TableNames;
+          //  List<string> currentTables = client.ListTablesAsync().TableNames;
+            ListTablesResponse x = await client.ListTablesAsync();
+            List<string> currentTables = x.TableNames;
+        //    client.
             Console.WriteLine("Number of tables: " + currentTables.Count);
             if (!currentTables.Contains("AnimalsInventory"))
             {
@@ -61,14 +79,14 @@ namespace AWS
             }
         }
 
-        private void IsTableReadyToModify()
+        public static void IsTableReadyToModify()
         {
             var status = "";
 
             do
             {
                 // Wait 5 seconds before checking (again).
-                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(5));
+              //  System.Threading.Thread.Sleep(TimeSpan.FromSeconds(5));
 
                 try
                 {
@@ -92,7 +110,7 @@ namespace AWS
             } while (status != TableStatus.ACTIVE);
         }
 
-        private void InsertItemIntoTable()
+        public static void InsertItemIntoTable()
         {
             var request1 = new PutItemRequest
             {
