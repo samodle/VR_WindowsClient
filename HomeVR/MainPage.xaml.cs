@@ -28,5 +28,14 @@ namespace HomeVR
             this.InitializeComponent();
             DynamoDB.MakeTable();
         }
+
+        #region Initialization
+
+
+        #endregion
+
+        #region AWS S3 Bucket 
+
+        #endregion
     }
 }
