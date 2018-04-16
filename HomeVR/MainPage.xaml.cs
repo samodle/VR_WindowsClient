@@ -26,7 +26,7 @@ namespace HomeVR
         public MainPage()
         {
             this.InitializeComponent();
-            DynamoDB.MakeTable();
+    
         }
 
         #region Initialization
@@ -37,5 +37,14 @@ namespace HomeVR
         #region AWS S3 Bucket 
 
         #endregion
+
+        private void MainButtonA_Click(object sender, RoutedEventArgs e)
+        {
+            var i = 0;
+            var k = 9;
+            var xx = i + k;
+
+            DynamoDB.MakeTable();
+        }
     }
 }

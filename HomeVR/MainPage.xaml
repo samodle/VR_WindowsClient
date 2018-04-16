@@ -7,15 +7,18 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="White" BorderBrush="#FFE42D2D">
+        <Grid.FocusVisualPrimaryBrush>
+            <ImageBrush/>
+        </Grid.FocusVisualPrimaryBrush>
         <!-- Initial Navigation -->
         <Image x:Name="MainLogo" HorizontalAlignment="Left" Height="100" Margin="745,263,0,0" VerticalAlignment="Top" Width="100"/>
 
-        
+
         <!-- -->
-        
-        
+        <Button x:Name="MainButtonA" Content="Hello World" Height="159" Margin="558,376,0,465" Width="404" Background="#F218AFCD" Click="MainButtonA_Click" />
+
         <!-- -->
-        
+
     </Grid>
 </Page>
