@@ -1,144 +1,102 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Amazon;
 using Amazon.DynamoDBv2;
- using Amazon.DynamoDBv2.Model;
+using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.DocumentModel;
+using Amazon.DynamoDBv2.Model;
 using Amazon.Runtime;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AWS
 {
     public static class DynamoDB
     {
-        #region Variables/Properties
+ private const string accessKey = "AKIAJ56HXAFX3LRSLLHQ";
+        private const string secretKey = "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";
 
-        public static AmazonDynamoDBClient client;
 
-
-        #endregion
-        static DynamoDB()
+        public static async Task TaskMainAsync()
         {
-            var resources = new Windows.ApplicationModel.Resources.ResourceLoader.GetForCurrentView(); ;
-           // var token = resources.GetString("secret");
-            
-            client = new AmazonDynamoDBClient(resources.GetString("AWSKeyID"),resources.GetString("AWSKeySecret"));
-        }
+            string tableName = "TableNumberOneYo";
+            string hashKey = "UserId";
 
-  
-        public async static void MakeTable()
-        {
+         //   Console.WriteLine("Creating credentials and initializing DynamoDB client");
+            var credentials = new BasicAWSCredentials(accessKey, secretKey);
+            var client = new AmazonDynamoDBClient(credentials, RegionEndpoint.USEast1);
 
-            Console.WriteLine("Getting list of tables");
-          //  List<string> currentTables = client.ListTablesAsync().TableNames;
-            ListTablesResponse x = await client.ListTablesAsync();
-            List<string> currentTables = x.TableNames;
-        //    client.
-            Console.WriteLine("Number of tables: " + currentTables.Count);
-            if (!currentTables.Contains("AnimalsInventory"))
+          //  Console.WriteLine("Verify table => " + tableName);
+            var tableResponse = await client.ListTablesAsync();
+            if (!tableResponse.TableNames.Contains(tableName))
             {
-                var request = new CreateTableRequest
+              //  Console.WriteLine("Table not found, creating table => " + tableName);
+                await client.CreateTableAsync(new CreateTableRequest
                 {
-                    TableName = "AnimalsInventory",
-                    AttributeDefinitions = new List<AttributeDefinition>
-      {
-        new AttributeDefinition
-        {
-          AttributeName = "Id",
-          // "S" = string, "N" = number, and so on.
-          AttributeType = "N"
-        },
-        new AttributeDefinition
-        {
-          AttributeName = "Type",
-          AttributeType = "S"
-        }
-      },
-                    KeySchema = new List<KeySchemaElement>
-      {
-        new KeySchemaElement
-        {
-          AttributeName = "Id",
-          // "HASH" = hash key, "RANGE" = range key.
-          KeyType = "HASH"
-        },
-        new KeySchemaElement
-        {
-          AttributeName = "Type",
-          KeyType = "RANGE"
-        },
-      },
+                    TableName = tableName,
                     ProvisionedThroughput = new ProvisionedThroughput
                     {
-                        ReadCapacityUnits = 10,
-                        WriteCapacityUnits = 5
+                        ReadCapacityUnits = 3,
+                        WriteCapacityUnits = 1
                     },
-                };
-
-                var response = client.CreateTable(request);
-
-                Console.WriteLine("Table created with request ID: " + response.ResponseMetadata.RequestId);
-            }
-        }
-
-        public static void IsTableReadyToModify()
-        {
-            var status = "";
-
-            do
-            {
-                // Wait 5 seconds before checking (again).
-              //  System.Threading.Thread.Sleep(TimeSpan.FromSeconds(5));
-
-                try
-                {
-                    var response = client.DescribeTable(new DescribeTableRequest
+                    KeySchema = new List<KeySchemaElement>
                     {
-                        TableName = "AnimalsInventory"
-                    });
-
-                    Console.WriteLine("Table = {0}, Status = {1}",
-                      response.Table.TableName,
-                      response.Table.TableStatus);
-
-                    status = response.Table.TableStatus;
+                        new KeySchemaElement
+                        {
+                            AttributeName = hashKey,
+                            KeyType = KeyType.HASH
+                        }
+                    },
+                    AttributeDefinitions = new List<AttributeDefinition>
+                    {
+                        new AttributeDefinition { AttributeName = hashKey, AttributeType=ScalarAttributeType.S }
+                    }
+                });
+                
+                bool isTableAvailable = false;
+                while (!isTableAvailable) {
+                  //  Console.WriteLine("Waiting for table to be active...");
+                  await Task.Delay(TimeSpan.FromSeconds(2));
+                   // Thread.Sleep(5000);
+                    var tableStatus = await client.DescribeTableAsync(tableName);
+                    isTableAvailable = tableStatus.Table.TableStatus == "ACTIVE";
                 }
-                catch (ResourceNotFoundException)
-                {
-                    // DescribeTable is eventually consistent. So you might
-                    //   get resource not found. 
-                }
+            }
 
-            } while (status != TableStatus.ACTIVE);
-        }
+       //     Console.WriteLine("Set a local DB context");
+            var context = new DynamoDBContext(client);
 
-        public static void InsertItemIntoTable()
-        {
-            var request1 = new PutItemRequest
+        //    Console.WriteLine("Create an AlexaAudioState object to save");
+            AlexaAudioState currentState = new AlexaAudioState
             {
-                TableName = "AnimalsInventory",
-                Item = new Dictionary<string, AttributeValue>
-  {
-    { "Id", new AttributeValue { N = "1" }},
-    { "Type", new AttributeValue { S = "Dog" }},
-    { "Name", new AttributeValue { S = "Fido" }}
-  }
+                UserId = "someAwesomeUser"         
             };
 
-            var request2 = new PutItemRequest
-            {
-                TableName = "AnimalsInventory",
-                Item = new Dictionary<string, AttributeValue>
-  {
-    { "Id", new AttributeValue { N = "2" }},
-    { "Type", new AttributeValue { S = "Cat" }},
-    { "Name", new AttributeValue { S = "Patches" }}
-  }
-            };
+       //     Console.WriteLine("Save an AlexaAudioState object");
+            await context.SaveAsync<AlexaAudioState>(currentState);
 
-            client.PutItem(request1);
-            client.PutItem(request2);
+        //    Console.WriteLine("Getting an AlexaAudioState object");
+            List<ScanCondition> conditions = new List<ScanCondition>();
+            conditions.Add(new ScanCondition("UserId", ScanOperator.Equal, currentState.UserId));
+            var allDocs = await context.ScanAsync<AlexaAudioState>(conditions).GetRemainingAsync();
+            var savedState = allDocs.FirstOrDefault();
+
+        //    Console.WriteLine("Verifying object...");
+         //   if (JsonConvert.SerializeObject(savedState) == JsonConvert.SerializeObject(currentState))
+          //      Console.WriteLine("Object verified");
+        //    else
+          //      Console.WriteLine("oops, something went wrong");
+
+            //Console.WriteLine("Delete table => " + tableName);
+            //context.Dispose();
+            //await client.DeleteTableAsync(new DeleteTableRequest() { TableName = tableName });
         }
+    }
 
-
-
+    internal class AlexaAudioState
+    {
+        public string UserId { get; set; }
     }
 }

@@ -8,15 +8,15 @@
     mc:Ignorable="d">
 
     <Grid Background="White" BorderBrush="#FFE42D2D">
-        <Grid.FocusVisualPrimaryBrush>
-            <ImageBrush/>
-        </Grid.FocusVisualPrimaryBrush>
-        <!-- Initial Navigation -->
-        <Image x:Name="MainLogo" HorizontalAlignment="Left" Height="100" Margin="745,263,0,0" VerticalAlignment="Top" Width="100"/>
 
+        <!-- Initial Navigation -->
+        <!--
+        <Image x:Name="MainLogo" HorizontalAlignment="Left" Height="100" Margin="745,263,0,0" VerticalAlignment="Top" Width="100"/>
+-->
 
         <!-- -->
-        <Button x:Name="MainButtonA" Content="Hello World" Height="159" Margin="558,376,0,465" Width="404" Background="#F218AFCD" Click="MainButtonA_Click" />
+        <Button x:Name="MainButtonA" Content="Hello World" Height="251" Margin="55,347,0,402" Width="620" Background="#F218AFCD" Click="MainButtonA_Click" FocusVisualSecondaryBrush="#DBFF0000" BorderBrush="#FF08ED5D" />
+        <Button Content="Button" HorizontalAlignment="Left" Margin="1914,370,-734,0" VerticalAlignment="Top" Width="100"/>
 
         <!-- -->
 

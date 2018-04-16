@@ -44,7 +44,9 @@ namespace HomeVR
             var k = 9;
             var xx = i + k;
 
-            DynamoDB.MakeTable();
+            var xyz = DynamoDB.TaskMainAsync();
+
+          //  DynamoDB.MakeTable();
         }
     }
 }
