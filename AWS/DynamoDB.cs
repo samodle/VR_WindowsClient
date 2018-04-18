@@ -85,6 +85,49 @@ namespace AWS
             }
         }
 
+        public static async void UpdatePeopleByDocumentModel(string tableName)
+        {
+            try
+            {
+                using (IAmazonDynamoDB client = GetDynamoDbClient())
+                {
+                    Table peopleTable = Table.LoadTable(client, tableName);
+                    Document firstPerson = new Document();
+                    firstPerson["Name"] = "John";
+                    firstPerson["Birthdate"] = new DateTime(1980, 06, 24);
+                    firstPerson["Age"] = 38;
+                    firstPerson["Neighbours"] = new List<String>() { "Evelyn", "Judy", "Sarah" };
+                    await peopleTable.UpdateItemAsync(firstPerson);
+                }
+            }
+            catch (AmazonDynamoDBException exception)
+            {
+                Debug.WriteLine(string.Concat("Exception while updating a record in DynamoDb table: {0}", exception.Message));
+                Debug.WriteLine(String.Concat("Error code: {0}, error type: {1}", exception.ErrorCode, exception.ErrorType));
+            }
+        }
+
+        public static async void DeletePersonByDocumentModel(string tableName)
+        {
+            try
+            {
+                using (IAmazonDynamoDB client = GetDynamoDbClient())
+                {
+                    Table peopleTable = Table.LoadTable(client, tableName);
+                    Document firstPerson = new Document();
+                    firstPerson["Name"] = "John";
+                    firstPerson["Birthdate"] = new DateTime(1980, 06, 24);
+                    await peopleTable.DeleteItemAsync(firstPerson);
+                }
+            }
+            catch (AmazonDynamoDBException exception)
+            {
+                Debug.WriteLine(string.Concat("Exception while deleting a record in DynamoDb table: {0}", exception.Message));
+                Debug.WriteLine(String.Concat("Error code: {0}, error type: {1}", exception.ErrorCode, exception.ErrorType));
+            }
+        }
+
+
         public static async void DeleteTableDemo(string tableName)
         {
             try
