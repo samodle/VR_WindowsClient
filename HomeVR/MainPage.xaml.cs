@@ -13,6 +13,9 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using AWS;
+using Amazon.DynamoDBv2;
+using Amazon.Runtime;
+using Amazon;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -23,6 +26,15 @@ namespace HomeVR
     /// </summary>
     public sealed partial class MainPage : Page
     {
+
+        #region Variables & Properties
+        private const string accessKey = "AKIAJ56HXAFX3LRSLLHQ";
+        private const string secretKey = "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";
+
+        private List<string> DynamoTableNames = new List<string>();
+        #endregion
+
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -30,23 +42,44 @@ namespace HomeVR
         }
 
         #region Initialization
+        private async void initDynamoInfo()
+        {
+            var credentials = new BasicAWSCredentials(accessKey, secretKey);
+            var client = new AmazonDynamoDBClient(credentials, RegionEndpoint.USEast1);
 
+            //  Console.WriteLine("Verify table => " + tableName);
+            var tableResponse = await client.ListTablesAsync();
+            DynamoTableNames = tableResponse.TableNames;
+
+            dTableBox.Text = DynamoTableNames.ToString();
+        }
 
         #endregion
 
-        #region AWS S3 Bucket 
+        #region AWS
+        private void insertToTable()
+        {
 
+        }
         #endregion
 
+
+        #region UI
         private void MainButtonA_Click(object sender, RoutedEventArgs e)
         {
-            var i = 0;
-            var k = 9;
-            var xx = i + k;
+            initDynamoInfo();
+         //   var xyz = DynamoDB.TaskMainAsync();
 
-            var xyz = DynamoDB.TaskMainAsync();
-
-          //  DynamoDB.MakeTable();
         }
+
+        private void MainButtonB_Click(object sender, RoutedEventArgs e)
+        {
+
+
+
+            insertToTable();
+
+        }
+        #region
     }
 }

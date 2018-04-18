@@ -15,7 +15,7 @@ namespace AWS
 {
     public static class DynamoDB
     {
- private const string accessKey = "AKIAJ56HXAFX3LRSLLHQ";
+        private const string accessKey = "AKIAJ56HXAFX3LRSLLHQ";
         private const string secretKey = "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";
 
 
@@ -24,15 +24,15 @@ namespace AWS
             string tableName = "TableNumberOneYo";
             string hashKey = "UserId";
 
-         //   Console.WriteLine("Creating credentials and initializing DynamoDB client");
+            //   Console.WriteLine("Creating credentials and initializing DynamoDB client");
             var credentials = new BasicAWSCredentials(accessKey, secretKey);
             var client = new AmazonDynamoDBClient(credentials, RegionEndpoint.USEast1);
 
-          //  Console.WriteLine("Verify table => " + tableName);
+            //  Console.WriteLine("Verify table => " + tableName);
             var tableResponse = await client.ListTablesAsync();
             if (!tableResponse.TableNames.Contains(tableName))
             {
-              //  Console.WriteLine("Table not found, creating table => " + tableName);
+                //  Console.WriteLine("Table not found, creating table => " + tableName);
                 await client.CreateTableAsync(new CreateTableRequest
                 {
                     TableName = tableName,
@@ -54,40 +54,40 @@ namespace AWS
                         new AttributeDefinition { AttributeName = hashKey, AttributeType=ScalarAttributeType.S }
                     }
                 });
-                
+
                 bool isTableAvailable = false;
-                while (!isTableAvailable) {
-                  //  Console.WriteLine("Waiting for table to be active...");
-                  await Task.Delay(TimeSpan.FromSeconds(2));
-                   // Thread.Sleep(5000);
+                while (!isTableAvailable)
+                {
+                    //  Console.WriteLine("Waiting for table to be active...");
+                    await Task.Delay(TimeSpan.FromSeconds(2));
                     var tableStatus = await client.DescribeTableAsync(tableName);
                     isTableAvailable = tableStatus.Table.TableStatus == "ACTIVE";
                 }
             }
 
-       //     Console.WriteLine("Set a local DB context");
+            //     Console.WriteLine("Set a local DB context");
             var context = new DynamoDBContext(client);
 
-        //    Console.WriteLine("Create an AlexaAudioState object to save");
+            //    Console.WriteLine("Create an AlexaAudioState object to save");
             AlexaAudioState currentState = new AlexaAudioState
             {
-                UserId = "someAwesomeUser"         
+                UserId = "MOOSEsomeAwesomeUser"
             };
 
-       //     Console.WriteLine("Save an AlexaAudioState object");
+            //     Console.WriteLine("Save an AlexaAudioState object");
             await context.SaveAsync<AlexaAudioState>(currentState);
 
-        //    Console.WriteLine("Getting an AlexaAudioState object");
+            //    Console.WriteLine("Getting an AlexaAudioState object");
             List<ScanCondition> conditions = new List<ScanCondition>();
             conditions.Add(new ScanCondition("UserId", ScanOperator.Equal, currentState.UserId));
             var allDocs = await context.ScanAsync<AlexaAudioState>(conditions).GetRemainingAsync();
             var savedState = allDocs.FirstOrDefault();
 
-        //    Console.WriteLine("Verifying object...");
-         //   if (JsonConvert.SerializeObject(savedState) == JsonConvert.SerializeObject(currentState))
-          //      Console.WriteLine("Object verified");
-        //    else
-          //      Console.WriteLine("oops, something went wrong");
+            //    Console.WriteLine("Verifying object...");
+            if (JsonConvert.SerializeObject(savedState) == JsonConvert.SerializeObject(currentState))
+                Console.WriteLine("Object verified");
+            else
+                Console.WriteLine("oops, something went wrong");
 
             //Console.WriteLine("Delete table => " + tableName);
             //context.Dispose();
