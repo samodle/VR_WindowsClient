@@ -26,7 +26,6 @@ namespace HomeVR
     /// </summary>
     public sealed partial class MainPage : Page
     {
-
         #region Variables & Properties
         private const string accessKey = "AKIAJ56HXAFX3LRSLLHQ";
         private const string secretKey = "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";
@@ -34,38 +33,24 @@ namespace HomeVR
         private List<string> DynamoTableNames = new List<string>();
         #endregion
 
-
         public MainPage()
         {
             this.InitializeComponent();
     
         }
 
-        #region Initialization
-        private async void initDynamoInfo()
-        {
-            var nn = (await DynamoDB.GetTablesList()).ToString();
-
-            dTableBox.Text = nn;// DynamoTableNames.ToString();
-        }
-
-        #endregion
-
-        #region AWS
-
-        #endregion
 
         #region UI
         private void MainButtonA_Click(object sender, RoutedEventArgs e)
         {
-            initDynamoInfo();
-         //   var xyz = DynamoDB.TaskMainAsync();
-
+        //   DynamoDB.CreateNewTableDemo("SteveBob");
+            DynamoDB.InsertPeopleByDocumentModel("SteveBob");
         }
 
         private void MainButtonB_Click(object sender, RoutedEventArgs e)
         {
-
+          //  DynamoDbDemoService service = new DynamoDbDemoService();
+            DynamoDB.GetTablesDetails();
         }
         #endregion
     }
