@@ -44,25 +44,16 @@ namespace HomeVR
         #region Initialization
         private async void initDynamoInfo()
         {
-            var credentials = new BasicAWSCredentials(accessKey, secretKey);
-            var client = new AmazonDynamoDBClient(credentials, RegionEndpoint.USEast1);
+            var nn = (await DynamoDB.GetTablesList()).ToString();
 
-            //  Console.WriteLine("Verify table => " + tableName);
-            var tableResponse = await client.ListTablesAsync();
-            DynamoTableNames = tableResponse.TableNames;
-
-            dTableBox.Text = DynamoTableNames.ToString();
+            dTableBox.Text = nn;// DynamoTableNames.ToString();
         }
 
         #endregion
 
         #region AWS
-        private void insertToTable()
-        {
 
-        }
         #endregion
-
 
         #region UI
         private void MainButtonA_Click(object sender, RoutedEventArgs e)
@@ -75,11 +66,7 @@ namespace HomeVR
         private void MainButtonB_Click(object sender, RoutedEventArgs e)
         {
 
-
-
-            insertToTable();
-
         }
-        #region
+        #endregion
     }
 }

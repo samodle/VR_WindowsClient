@@ -18,7 +18,6 @@ namespace AWS
         private const string accessKey = "AKIAJ56HXAFX3LRSLLHQ";
         private const string secretKey = "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";
 
-
         public static async Task TaskMainAsync()
         {
             string tableName = "TableNumberOneYo";
@@ -92,6 +91,27 @@ namespace AWS
             //Console.WriteLine("Delete table => " + tableName);
             //context.Dispose();
             //await client.DeleteTableAsync(new DeleteTableRequest() { TableName = tableName });
+        }
+
+
+
+        private static IAmazonDynamoDB GetDynamoDbClient()
+        {
+            var credentials = new BasicAWSCredentials(accessKey, secretKey);
+            return new AmazonDynamoDBClient(credentials, RegionEndpoint.USEast1);
+
+        }
+
+
+        public static async Task<List<string>> GetTablesList()
+        {
+            using (IAmazonDynamoDB client = GetDynamoDbClient())
+            {
+                ListTablesRequest listTablesRequest = new ListTablesRequest();
+                listTablesRequest.Limit = 5;
+                ListTablesResponse listTablesResponse = await client.ListTablesAsync(listTablesRequest);
+                return listTablesResponse.TableNames;
+            }
         }
     }
 
